@@ -8,8 +8,8 @@ plugins:
 
 provider:
   name: aws
-  region: ${opt:region, "us-east-1"}
-  runtime: nodejs8.10
+  region: ${opt:region, "eu-central-1"}
+  runtime: nodejs12.x
   stage: ${opt:stage, "dev"}
 
 functions:
@@ -43,7 +43,7 @@ functions:
     handler: graphql.profilePictureResolver
     name: ${self:custom.api}-profilePictureResolver
     description: AppSync Resolver for User.profilePicture
-    runtime: nodejs8.10
+    runtime: nodejs12.x
     role: AWSAppSyncS3LambdaIAMRole
     environment:
       S3_BUCKET: { Fn::GetAtt: [ FileStorage, Arn ]}
@@ -61,7 +61,7 @@ custom:
   # The type of instance to launch into the ElasticSearch domain
   es_instanceType: "t2.small.elasticsearch"
   # The size in GB of the EBS volumes that contain the data
-  es_ebsVolumeGB: 8
+  es_ebsVolumeGB: 10
   # The number of read IOPS the DynamoDB table should support.
   ddb_readIOPS: 5
   # The number of write IOPS the DynamoDB table should support.
@@ -403,7 +403,7 @@ resources:
       Type: AWS::Elasticsearch::Domain
       Properties:
         DomainName: ${self:custom.es_domain}
-        ElasticsearchVersion: "6.2"
+        ElasticsearchVersion: "7.4"
         ElasticsearchClusterConfig:
           ZoneAwarenessEnabled: false
           InstanceCount: ${self:custom.es_instanceCount}
